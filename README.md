@@ -212,6 +212,18 @@ cd ../backend && SMP_ALLOWED_ORIGINS=https://your-domain.example SMP_ENABLE_DOCS
 
 Put it behind a TLS-terminating reverse proxy and set `SMP_ALLOWED_ORIGINS` to your real origin.
 
+### Option C — Render (one click, frontend + engine)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AkshayTrivediINDIA/signalmaster-pro)
+
+`render.yaml` defines a single Docker web service: stage 1 builds the SPA with `npm ci && npm run build`, stage 2
+runs FastAPI/SymPy and serves that build from the same origin, so there is no CORS setup and no `VITE_API_BASE`
+to keep in sync. `GET /api/health` is the health check.
+
+Free instances sleep after inactivity, so the first request after a quiet period takes roughly a minute. A
+symbolic computation runs in a child process; if the instance runs out of memory, move the service to a larger
+plan (see “Memory” above).
+
 ### Cost note
 The software itself is free and open source, and it needs no paid services. Whether hosting is free depends
 on the provider you choose — free tiers change, and custom domains usually cost money. This project makes no

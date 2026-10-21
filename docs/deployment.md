@@ -76,6 +76,8 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 Notes for operators:
 
+- **Render.** `render.yaml` at the repository root describes exactly this shape as a Docker web service; see
+  “Option C” in the README. Nothing else needs configuring on the host.
 - **One worker.** The rate limiter is in-memory per process; more workers mean per-worker budgets. For real
   capacity, put the limit in the proxy and scale horizontally.
 - **Timeouts.** Proxy read timeout should exceed `SMP_COMPUTE_TIMEOUT_SECONDS` (6 s) plus overhead — set 15 s.
