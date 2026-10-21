@@ -1,0 +1,366 @@
+/*
+ * Self-hosted variable fonts (SIL Open Font License, see src/assets/fonts).
+ * Shipping the files instead of a CDN keeps the app fully offline and avoids
+ * a third-party request on every load.
+ */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('../assets/fonts/inter-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+    U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url('../assets/fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+    U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens.
+ *
+ * The visual language is deliberately restrained: a neutral grey canvas, a
+ * single steel-blue accent, hairline borders instead of soft shadows, and a
+ * compact typographic scale. Nothing decorative is allowed to compete with the
+ * data — this is an instrument panel, not a marketing page.
+ */
+@layer base {
+  :root {
+    /* Light theme tokens (RGB triplets so Tailwind opacity modifiers work) */
+    --c-bg: 244 245 247;
+    --c-surface: 255 255 255;
+    --c-surface2: 243 244 246;
+    --c-line: 223 226 230;
+    --c-line-strong: 203 208 215;
+    --c-ink: 22 25 31;
+    --c-muted: 96 103 114;
+    --c-brand: 29 78 137;
+    --c-brand-soft: 234 239 246;
+    --c-brand-ink: 23 64 111;
+    --c-ok: 21 122 84;
+    --c-warn: 158 90 8;
+    --c-err: 178 38 28;
+    color-scheme: light;
+  }
+
+  .dark {
+    --c-bg: 13 15 19;
+    --c-surface: 21 24 30;
+    --c-surface2: 27 31 39;
+    --c-line: 42 47 57;
+    --c-line-strong: 58 65 78;
+    --c-ink: 226 229 234;
+    --c-muted: 148 156 168;
+    --c-brand: 122 163 214;
+    --c-brand-soft: 30 41 57;
+    --c-brand-ink: 165 195 232;
+    --c-ok: 74 190 140;
+    --c-warn: 214 158 74;
+    --c-err: 226 122 112;
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: rgb(var(--c-line));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-size: 13.5px;
+    line-height: 1.5;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-brand));
+    outline-offset: 1px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: rgb(var(--c-brand) / 0.18);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-semibold text-ink;
+    letter-spacing: -0.006em;
+  }
+
+  code,
+  kbd,
+  samp {
+    @apply font-mono text-[0.88em];
+  }
+
+  /* Numeric data should never jitter as it updates. */
+  table,
+  .tnum,
+  input[type='number'] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Thin, theme-aware scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--c-line-strong)) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: rgb(var(--c-line-strong));
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* ---------------------------------------------------------------- surfaces */
+  .card {
+    @apply rounded-[6px] border border-line bg-surface;
+    box-shadow: 0 1px 1px rgb(16 24 40 / 0.03);
+  }
+  .card-pad {
+    @apply p-3.5 sm:p-4;
+  }
+  .card-title {
+    @apply text-[12.5px] font-semibold leading-5 text-ink;
+  }
+  .card-sub {
+    @apply text-[11px] leading-4 text-muted;
+  }
+
+  /* Eyebrow / section labels: small, uppercase, letter-spaced. */
+  .eyebrow {
+    @apply text-[10px] font-semibold uppercase text-muted;
+    letter-spacing: 0.075em;
+  }
+
+  /* ---------------------------------------------------------------- controls */
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-[4px] border px-2.5 py-[5px] text-[12.5px] font-medium leading-5 transition
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 disabled:cursor-not-allowed disabled:opacity-45;
+  }
+  .btn-primary {
+    @apply btn border-transparent bg-brand text-white;
+    color: #fff;
+    box-shadow: 0 1px 1px rgb(10 20 35 / 0.14);
+  }
+  .btn-primary:hover {
+    background-color: rgb(var(--c-brand) / 0.9);
+  }
+  .dark .btn-primary {
+    color: rgb(12 18 28);
+  }
+  .btn-secondary {
+    @apply btn border-line bg-surface text-ink;
+    box-shadow: 0 1px 1px rgb(16 24 40 / 0.04);
+  }
+  .btn-secondary:hover {
+    @apply bg-surface2;
+    border-color: rgb(var(--c-line-strong));
+  }
+  .btn-ghost {
+    @apply btn border-transparent bg-transparent text-muted hover:bg-surface2 hover:text-ink;
+  }
+  .btn-danger {
+    @apply btn border-transparent bg-err text-white;
+  }
+  .btn-danger:hover {
+    background-color: rgb(var(--c-err) / 0.9);
+  }
+  .btn-sm {
+    @apply gap-1 px-2 py-1 text-[11.5px];
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center rounded-[4px] border border-transparent bg-transparent p-1.5 text-muted transition
+      hover:bg-surface2 hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 disabled:opacity-45;
+  }
+
+  .input {
+    @apply w-full rounded-[4px] border border-line bg-surface px-2 py-[5px] text-[12.5px] leading-5 text-ink placeholder:text-muted/70
+      transition focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/15 disabled:opacity-60;
+    box-shadow: inset 0 1px 1px rgb(16 24 40 / 0.03);
+  }
+  .input-invalid {
+    @apply border-err focus:border-err focus:ring-err/20;
+  }
+  .label {
+    @apply mb-[3px] block text-[11px] font-medium text-muted;
+    letter-spacing: 0.01em;
+  }
+  .hint {
+    @apply mt-1 text-[10.5px] leading-snug text-muted;
+  }
+  .field-error {
+    @apply mt-1 text-[10.5px] leading-snug text-err;
+  }
+  .select {
+    @apply input appearance-none pr-7 bg-no-repeat;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23606772' stroke-width='1.7'><path d='M6 8l4 4 4-4'/></svg>");
+    background-position: right 0.4rem center;
+    background-size: 1rem;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-[3px] border border-line bg-surface2 px-1.5 py-[1px] text-[10.5px] font-medium text-muted;
+  }
+  .kbd {
+    @apply rounded-[3px] border border-line bg-surface2 px-1 py-[1px] font-mono text-[10px] leading-4 text-muted;
+  }
+
+  /* ------------------------------------------------------------------ tables */
+  .table-wrap {
+    @apply overflow-auto rounded-[4px] border border-line;
+  }
+  .table {
+    @apply w-full border-collapse text-[12px];
+  }
+  .table thead th {
+    /* Not uppercased on purpose: headers carry units such as "t (s)" and a
+       case transform would corrupt them. */
+    @apply sticky top-0 z-[1] whitespace-nowrap border-b border-line bg-surface2 px-2.5 py-1.5 text-left text-[10.5px] font-semibold text-muted;
+    letter-spacing: 0.03em;
+  }
+  .table tbody td {
+    @apply whitespace-nowrap border-b border-line/70 px-2.5 py-1 font-mono text-[11.5px] leading-5 text-ink;
+  }
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .table tbody tr:hover td {
+    background-color: rgb(var(--c-brand) / 0.035);
+  }
+
+  /* -------------------------------------------------------------- messaging */
+  .note {
+    @apply rounded-[4px] border border-line bg-surface2/50 px-2.5 py-1.5 text-[11.5px] leading-relaxed text-muted;
+  }
+  .note-warn {
+    @apply rounded-[4px] border border-warn/30 bg-warn/[0.07] px-2.5 py-1.5 text-[11.5px] leading-relaxed text-warn;
+  }
+  .note-err {
+    @apply rounded-[4px] border border-err/30 bg-err/[0.07] px-2.5 py-1.5 text-[11.5px] leading-relaxed text-err;
+  }
+  .note-ok {
+    @apply rounded-[4px] border border-ok/30 bg-ok/[0.07] px-2.5 py-1.5 text-[11.5px] leading-relaxed;
+    color: rgb(var(--c-ok));
+  }
+
+  /* -------------------------------------------------------------- navigation */
+  .nav-link {
+    @apply flex items-center gap-2 rounded-[4px] px-2 py-[5px] text-[12.5px] font-normal text-muted transition-colors
+      hover:bg-surface2 hover:text-ink;
+  }
+  .nav-link-active {
+    @apply font-medium;
+    background-color: rgb(var(--c-brand) / 0.08);
+    color: rgb(var(--c-brand-ink));
+    box-shadow: inset 2px 0 0 0 rgb(var(--c-brand));
+  }
+  .dark .nav-link-active {
+    color: rgb(var(--c-brand-ink));
+    background-color: rgb(var(--c-brand) / 0.12);
+  }
+
+  /* --------------------------------------------------------- segmented tabs */
+  .seg {
+    @apply inline-flex rounded-[4px] border border-line bg-surface2 p-[2px];
+  }
+  .seg-item {
+    @apply rounded-[3px] px-2 py-[3px] text-[11.5px] font-medium text-muted transition-colors hover:text-ink;
+  }
+  .seg-item-active {
+    @apply bg-surface text-ink;
+    box-shadow: 0 1px 2px rgb(16 24 40 / 0.1);
+  }
+
+  .katex {
+    font-size: 1.02em;
+  }
+  .katex-display {
+    margin: 0.3rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded bg-surface2;
+  }
+
+  /* Native disclosures ("Data description", "Method & assumptions") are used
+     for secondary detail; replace the platform marker with a quiet chevron. */
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: auto;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg) translateY(-1px);
+    transition: transform 120ms ease;
+    opacity: 0.6;
+  }
+  details[open] > summary::after {
+    transform: rotate(-135deg) translateY(-1px);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  /* Section divider used inside cards and panels. */
+  .hairline {
+    @apply border-t border-line;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    font-size: 11pt;
+  }
+  .card {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}

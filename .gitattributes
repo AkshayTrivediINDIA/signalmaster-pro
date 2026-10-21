@@ -1,0 +1,13 @@
+# Normalise line endings so containers and CI get the same bytes we test with.
+* text=auto
+*.sh      text eol=lf
+Dockerfile text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+*.md      text eol=lf
+
+# Binary assets: never diff or convert.
+*.png     binary
+*.ico     binary
+*.woff2   binary
+*.zip     binary

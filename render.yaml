@@ -1,0 +1,30 @@
+# Render Blueprint for SignalMaster Pro.
+#
+# One Docker web service serves both the built SPA and the FastAPI/SymPy
+# engine on the same origin. Same origin means no CORS configuration and no
+# VITE_API_BASE to keep in sync.
+#
+# Deploy: Render Dashboard -> New -> Blueprint -> pick this repository.
+# The service name below decides the default URL:
+#   https://signalmaster-pro.onrender.com
+
+services:
+  - type: web
+    name: signalmaster-pro
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    # Cheap, no computation: the process imports SymPy at start-up, nothing else.
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # The schema is not secret, but there is no reason to publish it.
+      - key: SMP_ENABLE_DOCS
+        value: "false"
+      - key: SMP_LOG_LEVEL
+        value: info
+      # Same-origin deployment, so CORS never comes into play. If you later
+      # serve the frontend from another host, set this to that origin:
+      #   SMP_ALLOWED_ORIGINS=https://app.example.com
