@@ -15,7 +15,7 @@ const GROUPS: Array<'Workspace' | 'Transforms' | 'Learning'> = ['Workspace', 'Tr
 /** Project credits, shown in the sidebar footer. */
 const AUTHORS = [
   'Akshay Trivedi',
-  'Prakhar Srivatsva',
+  'Prakhar Srivastava',
   'Shubham Srivastava',
   'Shaikh Salman',
   'Ashish Kharwar',
