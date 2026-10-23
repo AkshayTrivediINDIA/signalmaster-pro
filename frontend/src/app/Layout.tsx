@@ -12,6 +12,16 @@ import { useToast } from '../components/ui/feedback';
 
 const GROUPS: Array<'Workspace' | 'Transforms' | 'Learning'> = ['Workspace', 'Transforms', 'Learning'];
 
+/** Project credits, shown in the sidebar footer. */
+const AUTHORS = [
+  'Akshay Trivedi',
+  'Prakhar Srivatsva',
+  'Shubham Srivastava',
+  'Shaikh Salman',
+  'Ashish Kharwar',
+] as const;
+
+
 /**
  * Application shell: collapsible sidebar, sticky top bar with global search,
  * help access, theme switch and settings, plus the routed workspace.
@@ -115,7 +125,29 @@ export function Layout() {
         </nav>
 
         <div className="border-t border-line px-2 py-2">
-          <div className={`flex items-center gap-2 px-1.5 text-[11px] ${collapsed ? 'justify-center' : ''}`} title={`Symbolic engine: ${status}`}>
+          <div className={`pb-2 ${collapsed ? 'flex justify-center' : 'px-1.5'}`}>
+            {collapsed ? (
+              <span
+                className="text-muted"
+                title={`Developed by ${AUTHORS.join(', ')}`}
+                aria-label={`Developed by ${AUTHORS.join(', ')}`}
+              >
+                <Icon name="users" size={14} />
+              </span>
+            ) : (
+              <>
+                <p className="eyebrow mb-1">Developed by</p>
+                <ul className="space-y-px text-[10.5px] leading-[1.4] text-muted">
+                  {AUTHORS.map((name) => (
+                    <li key={name} className="truncate" title={name}>
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+          <div className={`flex items-center gap-2 border-t border-line px-1.5 pt-2 text-[11px] ${collapsed ? 'justify-center' : ''}`} title={`Symbolic engine: ${status}`}>
             <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${status === 'online' ? 'bg-ok' : status === 'checking' ? 'bg-warn' : 'bg-muted'}`} aria-hidden="true" />
             {!collapsed && (
               <span className="truncate text-muted">

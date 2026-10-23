@@ -45,6 +45,7 @@ const paths: Record<string, string> = {
   activity: 'M3 12h4l2 6 4-14 2 8h6',
   clock: 'M12 21a9 9 0 100-18 9 9 0 000 18zM12 7v5l4 2',
   folder: 'M3 6h6l2 2h10v12H3z',
+  users: 'M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75',
 };
 
 export type IconName = keyof typeof paths;
